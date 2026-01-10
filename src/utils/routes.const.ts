@@ -1,4 +1,4 @@
 export const ROUTES = {
-    HOME: '/',
-    COINS: '/coins'
+  HOME: '/',
+  COINS: '/coins',
 } as const
