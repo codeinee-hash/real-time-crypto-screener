@@ -1,16 +1,17 @@
-import { fetcher } from '@/lib/coingecko.api'
 import Image from 'next/image'
 import { formatCurrency } from '@/utils/helpers'
+import { getCoinOverview } from '@/api/coin-overview.api'
+import { CoinOverviewFallback } from '@/components/home/fallback'
 
 export async function CoinOverview() {
-  const coin = await fetcher<CoinDetailsData>('/coins/bitcoin', {
-    dex_pair_format: 'symbol',
-  })
+  const coin = await getCoinOverview()
+
+  if (!coin) return <CoinOverviewFallback />
 
   return (
     <div id="coin-overview">
       <div className="header pt-2">
-        <Image src={coin?.image?.large} alt={coin.name} width={56} height={56} />
+        <Image src={coin.image.large} alt={coin.name} width={56} height={56} />
         <div className="info">
           <p>
             {coin.name} / {coin.symbol.toUpperCase()}

@@ -1,10 +1,11 @@
-import { fetcher } from '@/lib/coingecko.api'
 import Link from 'next/link'
-import { ROUTES } from '@/utils/constants'
 import Image from 'next/image'
-import { cn } from '@/lib/css'
 import { TrendingDown, TrendingUp } from 'lucide-react'
 import { DataTable } from '@/components/data-table'
+import { TrendingCoinsFallback } from '@/components/home/fallback'
+import { getTrendingCoins } from '@/api/trending-coins.api'
+import { ROUTES } from '@/utils/constants'
+import { cn } from '@/lib/css'
 
 const COLUMNS: DataTableColumn<TrendingCoin>[] = [
   {
@@ -25,7 +26,7 @@ const COLUMNS: DataTableColumn<TrendingCoin>[] = [
     cellClassName: 'name-cell',
     cell(coin) {
       const item = coin.item
-      const isTrendingUp = item.data.price_change_percentage_24h
+      const isTrendingUp = item.data.price_change_percentage_24h.usd >= 0
       return (
         <div
           className={cn(
@@ -53,25 +54,21 @@ const COLUMNS: DataTableColumn<TrendingCoin>[] = [
 ]
 
 export async function TrendingCoins() {
-  const trendingCoins = await fetcher<{ coins: TrendingCoin[] }>(
-    '/search/trending',
-    undefined,
-    300
-  )
+  const trendingCoins = await getTrendingCoins()
+
+  if (!trendingCoins) return <TrendingCoinsFallback />
 
   return (
     <div id="trending-coins">
       <h4>Trending Coins</h4>
-      <div id="trending-coins">
-        <DataTable
-          data={trendingCoins.coins.slice(0, 5) || []}
-          columns={COLUMNS}
-          rowKey={coin => coin.item.id}
-          tableClassName="trending-coins-table"
-          headerCellClassName="py-3!"
-          bodyCellClassName="py-2!"
-        />
-      </div>
+      <DataTable
+        data={trendingCoins.slice(0, 5) || []}
+        columns={COLUMNS}
+        rowKey={coin => coin.item.id}
+        tableClassName="trending-coins-table"
+        headerCellClassName="py-3!"
+        bodyCellClassName="py-2!"
+      />
     </div>
   )
 }
