@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { ROUTES } from '@/utils/routes.const'
+import { ROUTES } from '@/utils/constants'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/css'
 
