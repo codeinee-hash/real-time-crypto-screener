@@ -18,14 +18,13 @@ export function Chart({
   height = 360,
   initialPeriod = 'daily',
 }: CandlestickChartProps) {
-  const [loading, setLoading] = useState<boolean>(false)
   const [period, setPeriod] = useState<Period>(initialPeriod)
   const [ohlcData, setOhlcData] = useState<OHLCData[]>(data ?? [])
   const [isPending, startTransition] = useTransition()
 
-  const chartRef = useRef<IChartApi>(null)
+  const chartRef = useRef<IChartApi | null>(null)
   const chartContainerRef = useRef<HTMLDivElement | null>(null)
-  const candleSeriesRef = useRef<ISeriesApi<'Candlestick'>>(null)
+  const candleSeriesRef = useRef<ISeriesApi<'Candlestick'> | null>(null)
 
   const fetchOHLCData = async (selectedPeriod: Period) => {
     try {
@@ -107,7 +106,7 @@ export function Chart({
               key={value}
               className={period === value ? 'config-button-active' : 'config-button'}
               onClick={() => handlePeriodChange(value)}
-              disabled={loading}
+              disabled={isPending}
             >
               {label}
             </button>
