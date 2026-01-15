@@ -30,7 +30,9 @@ export async function fetcher<T>(
   })
 
   if (!response.ok) {
-    const error: CoinGeckoErrorBody = await response.json().catch(() => ({}))
+    const error: CoinGeckoErrorBody = await response.json().catch(err => {
+      console.log('ERROR: ', err)
+    })
 
     throw new Error(
       `API error: ${response.status}: ${error.error || response.statusText}`
