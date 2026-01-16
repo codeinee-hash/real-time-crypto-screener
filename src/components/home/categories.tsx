@@ -15,8 +15,14 @@ const COLUMNS: DataTableColumn<Category>[] = [
     header: 'Top Gainers',
     cellClassName: 'top-gainers-cell',
     cell: category =>
-      category.top_3_coins.map(coin => (
-        <Image key={coin} src={coin} alt={coin} width={26} height={26} />
+      category.top_3_coins.map((coin, idx) => (
+        <Image
+          key={coin}
+          src={coin}
+          alt={category.top_3_coins_id[idx]}
+          width={26}
+          height={26}
+        />
       )),
   },
   {
