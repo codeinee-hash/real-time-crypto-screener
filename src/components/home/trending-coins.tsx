@@ -6,12 +6,13 @@ import { TrendingCoinsFallback } from '@/components/home/fallback'
 import { getTrendingCoins } from '@/api/trending-coins.api'
 import { ROUTES } from '@/utils/constants'
 import { cn } from '@/lib/css'
+import { formatCurrency, formatPercentage } from '@/utils/helpers'
 
 const COLUMNS: DataTableColumn<TrendingCoin>[] = [
   {
     header: 'Token',
     cellClassName: 'name-cell',
-    cell(coin) {
+    cell: coin => {
       const item = coin.item
       return (
         <Link href={`${ROUTES.COINS}/${item.id}`}>
@@ -24,7 +25,7 @@ const COLUMNS: DataTableColumn<TrendingCoin>[] = [
   {
     header: '24h Change',
     cellClassName: 'name-cell',
-    cell(coin) {
+    cell: coin => {
       const item = coin.item
       const isTrendingUp = item.data.price_change_percentage_24h.usd >= 0
       return (
@@ -34,13 +35,13 @@ const COLUMNS: DataTableColumn<TrendingCoin>[] = [
             isTrendingUp ? 'text-green-500' : 'text-destructive'
           )}
         >
-          <p>
+          <p className="flex items-center gap-1">
+            {formatPercentage(item.data.price_change_percentage_24h.usd)}
             {isTrendingUp ? (
               <TrendingUp width={16} height={16} />
             ) : (
               <TrendingDown width={16} height={16} />
             )}
-            {Math.abs(item.data.price_change_percentage_24h.usd).toFixed(2)}%
           </p>
         </div>
       )
@@ -49,7 +50,7 @@ const COLUMNS: DataTableColumn<TrendingCoin>[] = [
   {
     header: 'Price',
     cellClassName: 'price-cell',
-    cell: coin => coin.item.data.price,
+    cell: coin => formatCurrency(coin.item.data.price),
   },
 ]
 

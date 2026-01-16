@@ -13,8 +13,8 @@ interface CandlestickChartProps {
   children?: React.ReactNode
   mode?: 'historical' | 'live'
   initialPeriod?: Period
-  liveInterval: '1s' | '1m'
-  setLiveInterval: (interval: '1s' | '1m') => void
+  liveInterval?: '1s' | '1m'
+  setLiveInterval?: (interval: '1s' | '1m') => void
 }
 
 interface ConverterProps {
@@ -240,11 +240,15 @@ interface LiveCoinHeaderProps {
 }
 
 interface Category {
+  id: string
   name: string
-  top_3_coins: string[]
-  market_cap_change_24h: number
   market_cap: number
+  market_cap_change_24h: number
+  content: string
+  top_3_coins_id: string[]
+  top_3_coins: string[]
   volume_24h: number
+  updated_at: string
 }
 
 interface UseCoinGeckoWebSocketProps {

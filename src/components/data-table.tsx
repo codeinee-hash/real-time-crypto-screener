@@ -26,7 +26,11 @@ export function DataTable<T>({
           {columns.map((col, idx) => (
             <TableHead
               key={idx}
-              className={cn('bg-dark-400 text-purple-100 py-4 first:pl-5 last:pr-5')}
+              className={cn(
+                'bg-dark-400 text-purple-100 py-4 first:pl-5 last:pr-5',
+                headerCellClassName,
+                col.headClassName
+              )}
             >
               {col.header}
             </TableHead>
@@ -45,7 +49,11 @@ export function DataTable<T>({
             {columns.map((col, colIndex) => (
               <TableCell
                 key={colIndex}
-                className={cn('py-4 first:pl-5 last:pr-5', bodyCellClassName)}
+                className={cn(
+                  'py-4 first:pl-5 last:pr-5',
+                  bodyCellClassName,
+                  col.cellClassName
+                )}
               >
                 {col.cell(row, rowIndex)}
               </TableCell>
