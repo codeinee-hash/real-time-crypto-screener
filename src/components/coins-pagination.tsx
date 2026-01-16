@@ -30,6 +30,8 @@ export function CoinsPagination({ currentPage, totalPages, hasMorePages }: Pagin
         <PaginationItem className="pagination-control prev">
           <PaginationPrevious
             onClick={handlePreviousClick}
+            aria-disabled={currentPage === 1}
+            tabIndex={currentPage === 1 ? -1 : undefined}
             className={currentPage === 1 ? 'control-disabled' : 'control-button'}
           />
         </PaginationItem>
@@ -56,6 +58,8 @@ export function CoinsPagination({ currentPage, totalPages, hasMorePages }: Pagin
         <PaginationItem className="pagination-control next">
           <PaginationNext
             onClick={handleNextClick}
+            aria-disabled={isLastPage}
+            tabIndex={isLastPage ? -1 : undefined}
             className={isLastPage ? 'control-disabled' : 'control-button'}
           />
         </PaginationItem>
