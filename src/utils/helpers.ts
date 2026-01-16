@@ -1,16 +1,5 @@
 import { Time } from 'lightweight-charts'
 
-// export function formatCurrency(
-//   value: number,
-//   currency: string = 'USD',
-//   locale: string = 'en-US'
-// ) {
-//   return new Intl.NumberFormat(locale, {
-//     style: 'currency',
-//     currency,
-//   }).format(value)
-// }
-
 export function formatCurrency(
   value: number | null | undefined,
   digits?: number,
