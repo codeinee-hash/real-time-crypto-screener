@@ -1,0 +1,78 @@
+'use client'
+
+import { Separator } from '@/components/ui-kit/separator'
+import { Chart } from '@/components/chart'
+import { useCoinWebSocket } from '@/hooks/use-coin-web-socket'
+import { formatCurrency, timeAgo } from '@/utils/helpers'
+import { DataTable } from '@/components/data-table'
+
+export function LiveDataWrapper({
+  coinId,
+  poolId,
+  coin,
+  coinOHLCData,
+  children,
+}: LiveDataProps) {
+  const { trades } = useCoinWebSocket({ coinId, poolId })
+
+  const tradesColums: DataTableColumn<Trade>[] = [
+    {
+      header: 'Price',
+      cellClassName: 'price-cell',
+      cell: trade => (trade.price ? formatCurrency(trade.price) : '-'),
+    },
+    {
+      header: 'Amount',
+      cellClassName: 'amount-cell',
+      cell: trade => trade.amount?.toFixed(4) ?? '-',
+    },
+    {
+      header: 'Value',
+      cellClassName: 'value-cell',
+      cell: trade => (trade.value ? formatCurrency(trade.value) : '-'),
+    },
+    {
+      header: 'Buy/Sell',
+      cellClassName: 'type-cell',
+      cell: trade => (
+        <span className={trade.type === 'b' ? 'text-green-500' : 'text-red-500'}>
+          {trade.type === 'b' ? 'Buy' : 'Sell'}
+        </span>
+      ),
+    },
+    {
+      header: 'Time',
+      cellClassName: 'time-cell',
+      cell: trade => (trade.timestamp ? timeAgo(trade.timestamp) : '-'),
+    },
+  ]
+
+  return (
+    <section id="live-data-wrapper">
+      <p>Coin Header</p>
+
+      <Separator className="divider" />
+
+      <div className="trend">
+        <Chart coinId={coinId} data={coinOHLCData}>
+          <h4>Trend Overview</h4>
+        </Chart>
+      </div>
+
+      <Separator className="divider" />
+
+      {tradesColums && (
+        <div className="trades">
+          <h4>Recent Trades</h4>
+
+          <DataTable
+            columns={tradesColums}
+            data={trades}
+            rowKey={(_, idx) => idx}
+            tableClassName="trades-table"
+          />
+        </div>
+      )}
+    </section>
+  )
+}
