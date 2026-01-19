@@ -5,6 +5,7 @@ import { Chart } from '@/components/chart'
 import { useCoinWebSocket } from '@/hooks/use-coin-web-socket'
 import { formatCurrency, timeAgo } from '@/utils/helpers'
 import { DataTable } from '@/components/data-table'
+import { useState } from 'react'
 
 export function LiveDataWrapper({
   coinId,
@@ -13,7 +14,8 @@ export function LiveDataWrapper({
   coinOHLCData,
   children,
 }: LiveDataProps) {
-  const { trades } = useCoinWebSocket({ coinId, poolId })
+  const { trades, ohlcv } = useCoinWebSocket({ coinId, poolId })
+  const [liveInterval, setLiveInterval] = useState<'1s' | '1m'>('1s')
 
   const tradesColums: DataTableColumn<Trade>[] = [
     {
@@ -54,7 +56,15 @@ export function LiveDataWrapper({
       <Separator className="divider" />
 
       <div className="trend">
-        <Chart coinId={coinId} data={coinOHLCData}>
+        <Chart
+          coinId={coinId}
+          data={coinOHLCData}
+          liveOhlcv={ohlcv}
+          mode="live"
+          initialPeriod="daily"
+          liveInterval={liveInterval}
+          setLiveInterval={setLiveInterval}
+        >
           <h4>Trend Overview</h4>
         </Chart>
       </div>
