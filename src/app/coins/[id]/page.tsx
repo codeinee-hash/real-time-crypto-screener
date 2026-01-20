@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { formatCurrency } from '@/utils/helpers'
 import { LiveDataWrapper } from '@/components/live-data.wrapper'
+import { Converter } from '@/components/converter'
 
 export default async function CoinDetail({ params }: NextPageProps) {
   const { id } = await params
@@ -54,7 +55,7 @@ export default async function CoinDetail({ params }: NextPageProps) {
   ]
 
   return (
-    <main id="coin-details-age">
+    <main id="coin-details-page">
       <section className="primary">
         <LiveDataWrapper
           coinId={id}
@@ -67,7 +68,12 @@ export default async function CoinDetail({ params }: NextPageProps) {
       </section>
 
       <section className="secondary">
-        <p>Converter</p>
+        <Converter
+          symbol={coinData.symbol}
+          icon={coinData.image.small}
+          priceList={coinData.market_data.current_price}
+        />
+
         <div className="details">
           <h4>Coin Details</h4>
           <ul className="details-grid">
