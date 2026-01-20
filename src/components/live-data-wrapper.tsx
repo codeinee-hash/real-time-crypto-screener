@@ -18,7 +18,7 @@ export function LiveDataWrapper({
   const { trades, ohlcv, price } = useCoinWebSocket({ coinId, poolId })
   const [liveInterval, setLiveInterval] = useState<'1s' | '1m'>('1s')
 
-  const tradesColums: DataTableColumn<Trade>[] = [
+  const tradesColumns: DataTableColumn<Trade>[] = [
     {
       header: 'Price',
       cellClassName: 'price-cell',
@@ -57,7 +57,7 @@ export function LiveDataWrapper({
         image={coin.image.large}
         livePrice={price?.usd ?? coin.market_data.current_price.usd}
         livePriceChangePercentage24h={
-          price?.change24h ?? coin.market_data.price_change_percentage_30d_in_currency.usd
+          price?.change24h ?? coin.market_data.price_change_percentage_24h_in_currency.usd
         }
         priceChangePercentage30d={
           coin.market_data.price_change_percentage_30d_in_currency.usd
@@ -82,12 +82,12 @@ export function LiveDataWrapper({
 
       <Separator className="divider" />
 
-      {tradesColums && (
+      {tradesColumns && (
         <div className="trades">
           <h4>Recent Trades</h4>
 
           <DataTable
-            columns={tradesColums}
+            columns={tradesColumns}
             data={trades}
             rowKey={(_, idx) => idx}
             tableClassName="trades-table"

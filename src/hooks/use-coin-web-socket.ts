@@ -127,21 +127,21 @@ export const useCoinWebSocket = ({
       unsubscribeAll()
 
       subscribe('CGSimplePrice', { coin_id: [coinId], action: 'set_tokens' })
+
+      const poolAddress = poolId.replace('_', ':')
+      if (poolAddress) {
+        subscribe('OnchainTrade', {
+          'network_id:pool_addresses': [poolAddress],
+          action: 'set_pools',
+        })
+
+        subscribe('OnchainOHLCV', {
+          'network_id:pool_addresses': [poolAddress],
+          interval: liveInterval,
+          action: 'set_pools',
+        })
+      }
     })
-
-    const poolAddress = poolId.replace('_', ':')
-    if (poolAddress) {
-      subscribe('OnchainTrade', {
-        'network_id:pool_addresses': [poolAddress],
-        action: 'set_pools',
-      })
-
-      subscribe('OnchainOHLCV', {
-        'network_id:pool_addresses': [poolAddress],
-        interval: liveInterval,
-        action: 'set_pools',
-      })
-    }
   }, [coinId, poolId, isWsReady, liveInterval])
 
   return {
